@@ -1,0 +1,167 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: traffic-lab
+  labels:
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/enforce-version: v1.35
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: front-end-app
+  namespace: traffic-lab
+  labels:
+    role: front-end
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: nginx
+      image: nginx:1.28-alpine
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 1
+        periodSeconds: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-end-app
+  namespace: traffic-lab
+spec:
+  selector:
+    role: front-end
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: back-end-api-app
+  namespace: traffic-lab
+  labels:
+    role: back-end-api
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: nginx
+      image: nginx:1.28-alpine
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 1
+        periodSeconds: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-end-api-app
+  namespace: traffic-lab
+spec:
+  selector:
+    role: back-end-api
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: admin-front-end-app
+  namespace: traffic-lab
+  labels:
+    role: admin-front-end
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: nginx
+      image: nginx:1.28-alpine
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 1
+        periodSeconds: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-front-end-app
+  namespace: traffic-lab
+spec:
+  selector:
+    role: admin-front-end
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: admin-back-end-api-app
+  namespace: traffic-lab
+  labels:
+    role: admin-back-end-api
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: nginx
+      image: nginx:1.28-alpine
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 1
+        periodSeconds: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-back-end-api-app
+  namespace: traffic-lab
+spec:
+  selector:
+    role: admin-back-end-api
+  ports:
+    - port: 80
+      targetPort: 80
