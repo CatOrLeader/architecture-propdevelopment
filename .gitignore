@@ -1,0 +1,8 @@
+.DS_Store
+.idea/
+.vscode/
+Task4/.credentials/
+.artifacts/
+*.key
+*.kubeconfig
+__pycache__/
